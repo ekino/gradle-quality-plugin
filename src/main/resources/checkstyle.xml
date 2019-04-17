@@ -62,7 +62,7 @@ page at http://checkstyle.sourceforge.net/config.html -->
         <module name="ImportOrder">
             <!-- Checks for out of order import statements. -->
             <property name="severity" value="error"/>
-            <property name="groups" value="com.ekino.frida.api,com.ekino.frida.batch,com.ekino.frida.lib,java,javax,*"/>
+            <property name="groups" value="com,java,javax,*"/>
             <!-- This ensures that static imports go first. -->
             <property name="option" value="bottom"/>
             <property name="tokens" value="STATIC_IMPORT, IMPORT"/>

@@ -10,6 +10,29 @@ This plugin configures :
 * Code coverage (via [Jacoco](http://www.jacoco.org/))
 * Continuous code quality (via [SonarQube](https://www.sonarqube.org/))
 
+### Checkstyle configuration
+
+This plugin checks that import had 3 groups in the below order :
+
+* com
+* java
+* javax
+
+and after that a latest group with static import
+
+Be careful to configure your IDE code style with the same configuration to avoir errors.
+
+### Sonar Configuration
+
+These values can be set in project properties :
+
+* SONARQUBE_URL
+* SONARQUBE_TOKEN
+* sonarCoverageExclusions
+* sonarExclusions
+
+Or you can set it in manuel mode on your CI pipeline (because you don't want that each developer publish to sonar)
+
 
 ## Build
 

@@ -1,4 +1,4 @@
-package com.ekino.frida.plugin
+package com.ekino.oss.gradle.plugin.quality
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -15,7 +15,7 @@ class QualityPluginTest {
     Project project = ProjectBuilder.builder().build()
 
     assertEquals(0, project.getExtensions().getPlugins().size())
-    project.apply plugin: 'com.ekino.frida.quality'
+    project.apply plugin: 'com.ekino.oss.gradle.plugin.quality'
 
     assertTrue(project.pluginManager.hasPlugin('checkstyle'))
     assertTrue(project.pluginManager.hasPlugin('jacoco'))

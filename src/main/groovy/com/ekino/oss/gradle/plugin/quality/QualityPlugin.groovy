@@ -1,4 +1,4 @@
-package com.ekino.frida.plugin
+package com.ekino.oss.gradle.plugin.quality
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

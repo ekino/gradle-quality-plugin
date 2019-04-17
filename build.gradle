@@ -38,7 +38,7 @@ gradlePlugin {
   plugins {
     gradleQuality {
       id = "com.ekino.oss.gradle.plugin.quality"
-      implementationClass = "com.ekino.oss.gradle.plugin.QualityPlugin"
+      implementationClass = "com.ekino.oss.gradle.plugin.quality.QualityPlugin"
     }
   }
 }
