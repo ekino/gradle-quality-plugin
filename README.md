@@ -2,6 +2,10 @@
 
 Quality gradle plugin for Ekino projects
 
+[![Build Status](https://travis-ci.org/ekino/gradle-quality-plugin.svg?branch=master)](https://travis-ci.org/ekino/gradle-quality-plugin)
+[![GitHub (pre-)release](https://img.shields.io/github/release/ekino/gradle-quality-plugin.svg)](https://github.com/ekino/gradle-quality-plugin/releases)
+[![GitHub license](https://img.shields.io/github/license/ekino/gradle-quality-plugin.svg)](https://github.com/ekino/gradle-quality-plugin/blob/master/LICENSE.md)
+
 ## Overview
 
 This plugin configures :
