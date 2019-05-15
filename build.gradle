@@ -1,10 +1,15 @@
+
+
 plugins {
   id 'java-gradle-plugin'
   id 'groovy'
   id 'maven-publish'
   id 'signing'
   id 'net.researchgate.release' version '2.6.0'
+  id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.60'
 }
+
+
 
 repositories {
   jcenter()
@@ -148,4 +153,9 @@ signing {
   sign publishing.publications.mavenJava
   //needed by sonatype oss check in staging
   sign publishing.publications.mavenPluginMarker
+}
+
+task gitChangelogTask(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+  file = new File("CHANGELOG.md")
+  templateContent = file('changelog.mustache').getText('UTF-8')
 }
