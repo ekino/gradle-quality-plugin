@@ -87,3 +87,7 @@ plugins {
     id "com.ekino.oss.gradle.plugin.quality" version "1.0.0"
 }
 ```
+
+### Requirements
+
+Gradle 5.3.1 and JDK 8 are required.
