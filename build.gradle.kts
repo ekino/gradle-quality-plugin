@@ -6,7 +6,7 @@ import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
 
 plugins {
   `java-gradle-plugin`
-  groovy
+  `kotlin-dsl`
   `maven-publish`
   signing
   id("net.researchgate.release") version "2.6.0"
@@ -18,11 +18,11 @@ repositories {
 }
 
 dependencies {
-  implementation(localGroovy())
   implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${property("sonarqubePluginVersion")}")
 
   testImplementation(gradleTestKit())
   testImplementation("org.junit.jupiter:junit-jupiter:${property("junitVersion")}")
+  testImplementation("io.strikt:strikt-core:${property("striktVersion")}")
 }
 
 tasks.test {
@@ -68,7 +68,9 @@ val javadocJar by tasks.registering(Jar::class) {
 }
 
 val printVersion by tasks.registering {
-  println(project.version)
+  doFirst {
+    println(project.version)
+  }
 }
 
 val gitChangelogTask by tasks.registering(GitChangelogTask::class) {

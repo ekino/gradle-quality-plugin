@@ -140,3 +140,6 @@ gradle-app.setting
 
 # Jenv
 .java-version
+
+### OSX ###
+.DS_Store
