@@ -40,7 +40,7 @@ class QualityPlugin: Plugin<Project> {
           toolVersion = "8.19"
         }
 
-        tasks.withType(Checkstyle::class.java) {
+        tasks.withType<Checkstyle> {
           config = getTextResource(project, "checkstyle.xml")
         }
 
@@ -53,11 +53,9 @@ class QualityPlugin: Plugin<Project> {
           doFirst {
             println("Generating jacoco coverage report in HTML ...")
           }
-          doFirst {
-            // To load only ".exec" files that are really present
-            executionData.setFrom(files(executionData.files.filter {
-              it.exists()
-            }))
+          // To add ".exec" file from integrationTest task if exists
+          tasks.findByName("integrationTest")?.let {
+            executionData.from(file("${buildDir}/jacoco/integrationTest.exec")) // To merge Test Tasks Jacoco reports
           }
         }
 
@@ -65,41 +63,37 @@ class QualityPlugin: Plugin<Project> {
           dependsOn(jacocoTestReport)
         }
 
-        tasks.findByName("integrationTest")?.let {
-          val test by tasks.named("test")
-          val integrationTest by tasks.named("integrationTest")
-          jacocoTestReport.executionData.from(test, integrationTest) // To merge Test Tasks Jacoco reports
-        }
-
         if (project.hasProperty("sonarCoverageExclusions")) {
-          val excludes = (findProperty("sonarCoverageExclusions") as String).split("/,\\s*/")
-          //jacocoTestReport.classDirectories.setFrom(files(sourceSets["main"].output.classesDirs.filter {
-          //    fileTree("dir" to it, "exclude" to excludes)
-          //})
+          val excludes = (findProperty("sonarCoverageExclusions") as String).replace(".java", ".class").split(",\\s*".toRegex())
+          afterEvaluate {
+            jacocoTestReport.classDirectories.setFrom(sourceSets["main"].output.asFileTree.matching {
+              exclude(excludes)
+            })
+          }
         }
 
         // Sonar configuration
         configure<SonarQubeExtension> {
           properties {
-            property("sonar.host.url", project.findProperty("SONARQUBE_URL") ?: "")
-            property("sonar.login", project.findProperty("SONARQUBE_TOKEN") ?: "")
-            property("sonar.coverage.exclusions", project.findProperty("sonarCoverageExclusions") ?: "")
-            property("sonar.exclusions", project.findProperty("sonarExclusions") ?: "")
+            project.findProperty("SONARQUBE_URL")?.let { property("sonar.host.url", it) }
+            project.findProperty("SONARQUBE_TOKEN")?.let { property("sonar.login", it) }
+            project.findProperty("sonarCoverageExclusions")?.let { property("sonar.coverage.exclusions", it) }
+            project.findProperty("sonarExclusions")?.let { property("sonar.exclusions", it) }
+            tasks.findByName("integrationTest")?.let {
+              properties.remove("sonar.jacoco.reportPath")
+              property("sonar.jacoco.reportPaths", "${buildDir}/jacoco/test.exec, ${buildDir}/jacoco/integrationTest.exec")
+              property("sonar.junit.reportPaths", "${buildDir}/test-results/all")
+              property("sonar.tests", sourceSets["test"].allJava.srcDirs.filter { it.exists() } + sourceSets["integrationTest"].allJava.srcDirs.filter { it.exists() })
+            }
           }
         }
 
-        tasks.findByName("integrationTest")?.let {
-          tasks.findByName("aggregateJunitReports").let {
-            val sonarqube by tasks.named("sonarqube")
-            sonarqube.dependsOn("aggregateJunitReports")
-          }
-
-          configure<SonarQubeExtension> {
-            properties {
-              property("sonar.jacoco.reportPath", "")
-              property("sonar.jacoco.reportPaths", "${buildDir}/jacoco/integrationTest.exec, ${buildDir}/jacoco/test.exec")
-              property("sonar.junit.reportPaths", "${buildDir}/test-results/all")
-              properties["sonar.tests"] = sourceSets["test"].allJava.srcDirs.filter { it.exists() } + sourceSets["integrationTest"].allJava.srcDirs.filter { it.exists() }
+        afterEvaluate {
+          tasks.named("sonarqube") {
+            tasks.findByName("integrationTest")?.let {
+              tasks.findByName("aggregateJunitReports")?.let {
+                dependsOn("aggregateJunitReports")
+              }
             }
           }
         }

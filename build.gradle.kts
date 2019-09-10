@@ -169,7 +169,11 @@ publishing {
 }
 
 signing {
+  setRequired({
+    project.hasProperty("signing.keyId") && project.hasProperty("signing.password")
+  })
   sign(publishing.publications[mavenJavaPublication])
   //needed by sonatype oss check in staging
   sign(publishing.publications[mavenPluginMarkerPublication])
 }
+

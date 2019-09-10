@@ -10,7 +10,7 @@ import strikt.assertions.isTrue
 class QualityPluginTest {
 
   @Test
-  fun shouldContainsDefaultPlugins() {
+  fun `Should contains default plugins`() {
     val project = ProjectBuilder.builder().build()
 
     expectThat(project.plugins).isEmpty()

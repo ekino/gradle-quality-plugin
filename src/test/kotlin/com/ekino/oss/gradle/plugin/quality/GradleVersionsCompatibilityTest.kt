@@ -2,7 +2,6 @@ package com.ekino.oss.gradle.plugin.quality
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -17,8 +16,7 @@ class GradleVersionsCompatibilityTest {
 
     @ValueSource(strings = ["5.3.1", "5.6.1"])
     @ParameterizedTest(name = "Gradle {0}")
-    @DisplayName("Should work in Gradle version")
-    fun shouldWorkInGradleVersion(gradleVersion: String) {
+    fun `Should work in gradle version`(gradleVersion: String) {
         val buildScript =
                 """
             plugins {
