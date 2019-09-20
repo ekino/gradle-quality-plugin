@@ -30,10 +30,10 @@ Be careful to configure your IDE code style with the same configuration to avoir
 
 These values can be set in project properties :
 
-* SONARQUBE_URL
-* SONARQUBE_TOKEN
-* sonarCoverageExclusions
-* sonarExclusions
+* **SONARQUBE_URL** : Sonarqube server URL. Ex : `http://localhost:9000`
+* **SONARQUBE_TOKEN** : login or authentication token of a SonarQube user with Execute Analysis permission on the project
+* **sonarCoverageExclusions** : source files to exclude from code coverage (java extension, wildcard allowed, comma separator). Ex : `**/*Properties.java, **/*Constants.java`
+* **sonarExclusions** : source files to exclude from analysis (java extension, wildcard allowed, comma separator). Ex : `**/*Properties.java, **/*Constants.java`
 
 Or you can set it in manuel mode on your CI pipeline (because you don't want that each developer publish to sonar)
 
