@@ -66,7 +66,7 @@ class QualityPlugin: Plugin<Project> {
         if (project.hasProperty("sonarCoverageExclusions")) {
           val excludes = (findProperty("sonarCoverageExclusions") as String).replace(".java", ".class").split(",\\s*".toRegex())
           afterEvaluate {
-            jacocoTestReport.classDirectories.setFrom(sourceSets["main"].output.asFileTree.matching {
+            jacocoTestReport.classDirectories.setFrom(sourceSets["main"].output.classesDirs.asFileTree.matching {
               exclude(excludes)
             })
           }
