@@ -37,7 +37,7 @@ class QualityPlugin: Plugin<Project> {
 
         // Checkstyle configuration
         configure<CheckstyleExtension> {
-          toolVersion = "8.19"
+          toolVersion = "8.24"
         }
 
         tasks.withType<Checkstyle> {
@@ -45,10 +45,6 @@ class QualityPlugin: Plugin<Project> {
         }
 
         // Jacoco configuration
-        configure<JacocoPluginExtension> {
-          toolVersion = "0.8.3"
-        }
-
         val jacocoTestReport by tasks.named<JacocoReport>("jacocoTestReport") {
           doFirst {
             println("Generating jacoco coverage report in HTML ...")
