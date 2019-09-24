@@ -1,0 +1,17 @@
+plugins {
+    id 'com.ekino.oss.gradle.plugin.quality'
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.1'
+}
+repositories {
+    mavenCentral()
+}
+test {
+    useJUnitPlatform()
+}
+
+sonarqube {
+    skipProject = true // to avoid real sonar analysis (need a server)
+}
