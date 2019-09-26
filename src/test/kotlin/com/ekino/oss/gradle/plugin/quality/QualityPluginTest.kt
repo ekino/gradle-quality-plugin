@@ -20,8 +20,10 @@ class QualityPluginTest {
     expectThat(project.pluginManager.hasPlugin("java")).isTrue()
     expectThat(project.pluginManager.hasPlugin("checkstyle")).isTrue()
     expectThat(project.pluginManager.hasPlugin("org.sonarqube")).isTrue()
+
     expectThat(project.getTasksByName("checkstyleMain", false)).isNotEmpty()
     expectThat(project.getTasksByName("checkstyleTest", false)).isNotEmpty()
     expectThat(project.getTasksByName("sonarqube", false)).isNotEmpty()
+    expectThat(project.getTasksByName("printCoverage", false)).isNotEmpty()
   }
 }
