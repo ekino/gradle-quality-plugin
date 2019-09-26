@@ -4,6 +4,7 @@
 
 package com.ekino.oss.gradle.plugin.quality
 
+import com.ekino.oss.gradle.plugin.quality.task.PrintCoverageTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -14,7 +15,6 @@ import org.gradle.api.resources.TextResource
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.*
 import org.gradle.testing.jacoco.plugins.JacocoPlugin
-import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.sonarqube.gradle.SonarQubeExtension
 import org.sonarqube.gradle.SonarQubePlugin
@@ -55,8 +55,13 @@ class QualityPlugin: Plugin<Project> {
           }
         }
 
+        val printCoverage by tasks.register<PrintCoverageTask>("printCoverage") {
+          htmlJacocoReport = "$buildDir/reports/jacoco/test/html/index.html"
+          mustRunAfter(jacocoTestReport)
+        }
+
         tasks.named("build") {
-          dependsOn(jacocoTestReport)
+          dependsOn(jacocoTestReport, printCoverage)
         }
 
         if (project.hasProperty("sonarCoverageExclusions")) {

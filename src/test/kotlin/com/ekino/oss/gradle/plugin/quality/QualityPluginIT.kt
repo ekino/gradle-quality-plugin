@@ -19,7 +19,7 @@ class QualityPluginIT {
   fun `Should check project quality with only test sourceSet`() {
     val result = runTask("project_with_test", "build", "sonar")
 
-    expectThat(result.tasks).hasSize(15)
+    expectThat(result.tasks).hasSize(16)
     expectThat(result.task(":checkstyleMain")).isNotNull()
     expectThat(result.task(":checkstyleTest")).isNotNull()
     expectThat(result.task(":jacocoTestReport")).isNotNull()
@@ -34,6 +34,8 @@ class QualityPluginIT {
     expectThat(result.task(":jacocoTestReport")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.output.contains("Generating jacoco coverage report in HTML ...")).isTrue()
     expectThat(result.task(":sonarqube")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    expectThat(result.output.contains("COVERAGE: 25%")).isTrue()
+    expectThat(result.task(":printCoverage")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
     val jacocoTestExecFile = tempDir.resolve("build")
             .resolve("jacoco")
@@ -77,7 +79,7 @@ class QualityPluginIT {
   fun `Should check project quality with test and integrationTest sourceSets`() {
     val result = runTask("project_with_test_and_integration_test", "build", "sonar")
 
-    expectThat(result.tasks).hasSize(21)
+    expectThat(result.tasks).hasSize(22)
     expectThat(result.task(":checkstyleMain")).isNotNull()
     expectThat(result.task(":checkstyleTest")).isNotNull()
     expectThat(result.task(":checkstyleIntegrationTest")).isNotNull()
@@ -91,6 +93,8 @@ class QualityPluginIT {
     expectThat(result.task(":jacocoTestReport")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.task(":sonarqube")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.task(":aggregateJunitReports")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    expectThat(result.output.contains("COVERAGE: 0%")).isTrue()
+    expectThat(result.task(":printCoverage")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
     val jacocoTestExecFile = tempDir.resolve("build")
             .resolve("jacoco")
