@@ -1,11 +1,13 @@
 package com.ekino.oss.gradle.plugin.quality
 
+import io.mockk.every
+import io.mockk.spyk
+import org.gradle.api.resources.MissingResourceException
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
-import strikt.assertions.isEmpty
-import strikt.assertions.isNotEmpty
-import strikt.assertions.isTrue
+import strikt.api.expectThrows
+import strikt.assertions.*
 
 class QualityPluginTest {
 
@@ -23,5 +25,16 @@ class QualityPluginTest {
     expectThat(project.getTasksByName("checkstyleMain", false)).isNotEmpty()
     expectThat(project.getTasksByName("checkstyleTest", false)).isNotEmpty()
     expectThat(project.getTasksByName("sonarqube", false)).isNotEmpty()
+  }
+
+  @Test
+  fun `Should throw missing resource exception when checkstyle config is not found`() {
+    val plugin = spyk<QualityPlugin>()
+
+    every { plugin.getFilePath() } returns (null)
+    expectThrows<MissingResourceException> { plugin.getCheckstyleConfig() }
+            .and { message }
+            .isA<String>()
+            .contains("The checkstyle config file cannot be found")
   }
 }

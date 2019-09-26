@@ -99,3 +99,14 @@ plugins {
 ### Requirements
 
 Gradle 5.3.1 and JDK 8 are required.
+
+
+You can override checkstyle version using a dedicated configuration (default is 8.24)
+
+Note: The default checkstyle.xml is compatible with 8.24 or later 
+```kotlin
+checkstyle {
+    toolVersion = "8.20"
+    configFile = file("${project.rootDir}/config/checkstyle.xml")
+}
+```
