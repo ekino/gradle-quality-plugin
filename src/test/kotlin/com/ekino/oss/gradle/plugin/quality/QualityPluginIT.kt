@@ -1,11 +1,14 @@
 package com.ekino.oss.gradle.plugin.quality
 
+import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import strikt.api.expectThat
+import strikt.api.expectThrows
 import strikt.assertions.*
 import java.io.File
 import java.nio.file.Path
@@ -134,6 +137,34 @@ class QualityPluginIT {
             .resolve("test")
             .resolve("html")
     expectThat(jacocoReportDir).exists()
+  }
+
+  @Test
+  fun `Should run checkstyle's task with configured tool version`() {
+    val result = runTask("project_with_test", "checkStyleMain", "--info")
+
+    expectThat(result.output) {
+      contains("Running Checkstyle 8.20")
+    }
+  }
+
+  @Test
+  fun `Should run checkstyle's task with default tool version`() {
+    val result = runTask("project_with_test_and_integration_test", "checkStyleMain", "--info")
+
+    expectThat(result.output) {
+      contains("Running Checkstyle 8.24")
+    }
+  }
+
+  @Test
+  fun `Should throw unexpected build failure exception when checkstyle config is not found`() {
+    expectThrows<UnexpectedBuildFailure> { runTask("project_with_missing_checkstyle_config", "checkStyleMain", "--info") }
+            .and { this.cause }
+            .isA<TaskExecutionException>()
+            .and { message }
+            .isA<String>()
+            .contains("""Unable to find: (.*) config/missing.xml""")
   }
 
   private fun runTask(project: String, vararg task: String): BuildResult {

@@ -8,16 +8,16 @@ import com.ekino.oss.gradle.plugin.quality.task.PrintCoverageTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.plugins.quality.Checkstyle
 import org.gradle.api.plugins.quality.CheckstyleExtension
 import org.gradle.api.plugins.quality.CheckstylePlugin
-import org.gradle.api.resources.TextResource
+import org.gradle.api.resources.MissingResourceException
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.*
 import org.gradle.testing.jacoco.plugins.JacocoPlugin
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.sonarqube.gradle.SonarQubeExtension
 import org.sonarqube.gradle.SonarQubePlugin
+import java.io.File
 
 class QualityPlugin: Plugin<Project> {
 
@@ -38,10 +38,7 @@ class QualityPlugin: Plugin<Project> {
         // Checkstyle configuration
         configure<CheckstyleExtension> {
           toolVersion = "8.24"
-        }
-
-        tasks.withType<Checkstyle> {
-          config = getTextResource(project, "checkstyle.xml")
+          configFile = getCheckstyleConfig()
         }
 
         // Jacoco configuration
@@ -102,8 +99,9 @@ class QualityPlugin: Plugin<Project> {
     }
   }
 
-  private fun getTextResource(project: Project, file: String): TextResource {
-    return project.resources.text.fromString(QualityPlugin::class.java.getClassLoader().getResource(file).readText())
-  }
+  internal fun getCheckstyleConfig(): File = getFilePath()?.let { File(it) }
+          ?: throw MissingResourceException("The checkstyle config file cannot be found")
+
+  internal fun getFilePath() = QualityPlugin::class.java.classLoader?.getResource("checkstyle.xml")?.path
 
 }
