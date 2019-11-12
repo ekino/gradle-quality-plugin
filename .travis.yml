@@ -1,7 +1,13 @@
 language: java
 install: true
+
+addons:
+  sonarcloud:
+    organization: "ekino-1"
+
 jdk:
 - openjdk11
+
 env:
   global:
   - GPG_FILE_NAME="ekino-gradle-quality-plugin.gpg"
@@ -13,8 +19,10 @@ env:
   - secure: FHZNyKY8h3htEZcCv8T/Y7yxPcK+VWTDJsWK3xBl/oxCQRdKXkY6LvZjYTdHfFPg0gFG3QbgIWy9/LsEBFyh6SEsOfk7JGVEuQRDJ8EmUIQcFATHoeJ2WmvzW8Q+v4NR8AneFgGcx52wO9wYxAZ1asnsoDya6/zz+2bCZhM9lw0eWFp2k18EztCW1njLoO3jqOCxLhGhwHz6KchKmG7435pn34JSl+NbDrsIn99iqQQhTqD4ucFtsMV4Trz+G8cryiHkiS3ytHIgfaeuulItt9zuBDqH7M3puoRpCvYuYYZ0L/DidpvKsodzFxgyFaLVsmrNhWcp+kkY4gzBtaFLyiyUdlUyAaxr93qBbHvkfJ5ffCwXa9iyaceIx7WL0DtBukjeh/ihrtXx/z6ggJSxeCb8h0IuP2Sq/E7t+FWe4xDbFkTSQ632b3OjpPa+9+lZ2Yq7ByjS8fxIz8MjA8VFrwd5Op0dACc7rw//MLILZdR1qqBc8e3rWnCkAWSfuQXaji19x2X6CwV00sY4dBSLFHg6PAzuaOKoJaSeLc19FOw2zeicCF3VpgAhTsB4HJWJYQMO021/eogDBh1VMHsuU0K8p8SdcLI8P7/rZxBfvu/M7TPy7MKcZs8n/yVivmfy3Nt4vc/KtLVgMhcD9nwNzGtd0gbMnA2ja4pqI8xshmI=
   - secure: UTIUFaOBBRASGX/hK73VcTJvflQVc0AzgnxVMy4TZ5L02J/x1KszTL4tAe+4QE1PTIOaEQ8sp3eOwlQMl8lIzlOq1Z5y4o2m0r375q2qTRmGtjf5CAHahibV6wLYH0Mjgmk5WMgkBf9U5GS6O7fkiXADGnkDI9GvqMXUHjvw4O4pX3gTLDpJTyo7V0/36spZ64xzGcm3zSVjWuC1l7d8lGWqdCEKEvJ7As1jluaYYlMKUh7kOq4TEG4bQaUY6SCp8b1LqybYSJ/dOD03LfHf4bDiIuJs8X7tppZIBogWR0dTQfmO19J+VXjdoUAhwK1wTHOXhBVGSSOtQLaynkyzaDRhjrWUqzv6R5LPXuQx5mqLsQah0r3qHug9kl2m9TRtl/TGJgkE1KSqRVxcXqIw95Ot1BuaBZnw3bBkxlUxGo7Xt3sEFMVUlpFFYLwzVgjaDGjSgIyeWCbAAmdlEFxnUgPlVhFDO+bY5viSl9sT4zefAxMg1BGCkgy/7kvwo5EmQGjMOLcziKA2NE5YR13hapEngUfIfpa1dMwCk87K7UpanbHgbuX3hSSWSIh1pC4wbMoBybRR9HsAmUY44nR6zMug5ZOOfKLTzRP9N5BhshmMbWiW2ve7Mgqm81H0PSmDzNL7jkwBxF/8serVi94hrEk08zZUuxGjPpyJ3PkNMqE=
   - secure: H3wxN0vDRs8sxXuDQmh7cubJ3SS5m/nFvx2YDP2Oqufj10RPLJ8aNh5C795+VYdBv9TCmv/3r5IjnHhYejitdC36kcYW5+vr57V4ZqcX1a+RilSItc75POtPUxCpujv8huko9YXmjq0t5JlapPdP4Ow0ONMmiEZuCDLQXwSetuXkR+BwVFKFGlvEYiqsnnoyq4BSNRJLbwq6xUv7l1mjfB/UVGUW5qwkCs4hi3CTx4u2CGEDIFLhhyiUf8AyxDPJCBlhkMxOWG00a2TCYdvuUccygJutuSrhawnkfS/q601nIJ7mKLeGMDcx7fMpLfUcQwtO3iAb9ZL8J+8289HyrJ5gLy6tbr7tNJZIzkjOpwe20ZJbxNz++ZdFtXn3yx390euLHsisUn+wySnhNmtNfapuGmJ4++aB4HTorxh544YVqklNNpnZO0Gi+kySunExhpgUAf/m3Rabl2gmmKo7paHwPmeCAtHxXId7Yk0f3ltkirkGA5nwFFqQUknkH3v25PmoYwta87tofK5HS04qIvqfUzF8WliuOmfUg491LagvtK4laYiIuh+8wZWRIgeWZN0sbjMHdeoA6TuBB1ukMj9SpJ947HXDSbLnW1mfPCqICJyvTn8jpe4b7ceR+gYLcFtJgQ7y1fC1xO+C52EstCK2TYZ+Nmn9sCfzlqoJeMI=
+
 before_script:
 - chmod -R ug+x .travis
+
 jobs:
   include:
   - stage: test
@@ -42,9 +50,11 @@ jobs:
     on:
       repo: ekino/gradle-quality-plugin
       tags: true
+
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
   - "$HOME/.gradle/caches/"
