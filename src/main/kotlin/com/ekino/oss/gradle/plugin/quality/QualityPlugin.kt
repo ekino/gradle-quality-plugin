@@ -17,7 +17,6 @@ import org.gradle.testing.jacoco.plugins.JacocoPlugin
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.sonarqube.gradle.SonarQubeExtension
 import org.sonarqube.gradle.SonarQubePlugin
-import java.io.File
 
 class QualityPlugin: Plugin<Project> {
 
@@ -38,7 +37,7 @@ class QualityPlugin: Plugin<Project> {
         // Checkstyle configuration
         configure<CheckstyleExtension> {
           toolVersion = "8.24"
-          configFile = getCheckstyleConfig()
+          config = resources.text.fromString(getCheckstyleConfig())
         }
 
         // Jacoco configuration
@@ -99,9 +98,9 @@ class QualityPlugin: Plugin<Project> {
     }
   }
 
-  internal fun getCheckstyleConfig(): File = getFilePath()?.let { File(it) }
+  internal fun getCheckstyleConfig() = getFilePath()?.use { String(it.readAllBytes()) }
           ?: throw MissingResourceException("The checkstyle config file cannot be found")
 
-  internal fun getFilePath() = QualityPlugin::class.java.classLoader?.getResource("checkstyle.xml")?.path
+  internal fun getFilePath() = QualityPlugin::class.java.classLoader?.getResourceAsStream("checkstyle.xml")
 
 }
