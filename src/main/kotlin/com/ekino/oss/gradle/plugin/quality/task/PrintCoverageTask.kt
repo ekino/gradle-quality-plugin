@@ -13,10 +13,12 @@ open class PrintCoverageTask : DefaultTask() {
     @Input
     lateinit var htmlJacocoReport: String
 
+    internal val coverageRegex = ">Total<.+>(?<coverage>[0-9]+)[\\s\\u00A0]?%<".toRegex()
+
     @TaskAction
     fun printCoverage() {
         File(htmlJacocoReport).takeIf { it.exists() }?.apply {
-            ">Total<.+>(?<coverage>[0-9]+) ?%<".toRegex().find(readText())?.let {
+            coverageRegex.find(readText())?.let {
                 println("COVERAGE: ${it.groups["coverage"]?.value}%")
             }
         }
