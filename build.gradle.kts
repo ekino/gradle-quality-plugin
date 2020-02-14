@@ -8,7 +8,7 @@ plugins {
   `java-gradle-plugin`
   `kotlin-dsl`
   `maven-publish`
-  `jacoco`
+  jacoco
   signing
   id("net.researchgate.release") version "2.6.0"
   id("se.bjurr.gitchangelog.git-changelog-gradle-plugin") version "1.60"
@@ -182,7 +182,7 @@ signing {
 
 tasks.jacocoTestReport {
   reports {
-    xml.setEnabled(true)
+    xml.isEnabled = true
   }
 }
 
