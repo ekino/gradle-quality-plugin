@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 ekino (https://www.ekino.com/)
+ * Copyright (c) 2020 ekino (https://www.ekino.com/)
  */
 
 package com.ekino.oss.gradle.plugin.quality.task
@@ -13,7 +13,8 @@ open class PrintCoverageTask : DefaultTask() {
     @Input
     lateinit var htmlJacocoReport: String
 
-    internal val coverageRegex = ">Total<.+>(?<coverage>[0-9]+)[\\s\\u00A0]?%<".toRegex()
+    @Input
+    var coverageRegex = ">Total<.+>(?<coverage>[0-9]+)[\\s\\u00A0]?%<".toRegex()
 
     @TaskAction
     fun printCoverage() {

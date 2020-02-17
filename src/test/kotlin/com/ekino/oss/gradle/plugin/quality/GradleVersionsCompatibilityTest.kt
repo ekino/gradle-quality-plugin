@@ -14,11 +14,11 @@ class GradleVersionsCompatibilityTest {
     @TempDir
     lateinit var tempDir: File
 
-    @ValueSource(strings = ["5.3.1", "5.6.2"])
+    @ValueSource(strings = ["5.3.1", "5.6.4", "6.1.1"])
     @ParameterizedTest(name = "Gradle {0}")
     fun `Should work in gradle version`(gradleVersion: String) {
         val buildScript =
-                """
+            """
             plugins {
                 id 'com.ekino.oss.gradle.plugin.quality'
             }
