@@ -98,7 +98,7 @@ class QualityPlugin: Plugin<Project> {
     }
   }
 
-  internal fun getCheckstyleConfig() = getFilePath()?.use { String(it.readAllBytes()) }
+  internal fun getCheckstyleConfig() = getFilePath()?.use { String(it.readBytes()) }
           ?: throw MissingResourceException("The checkstyle config file cannot be found")
 
   internal fun getFilePath() = QualityPlugin::class.java.classLoader?.getResourceAsStream("checkstyle.xml")
