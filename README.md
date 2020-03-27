@@ -54,41 +54,19 @@ Or you can set it in manuel mode on your CI pipeline (because you don't want tha
 
 ## Usage
 
-To use this plugin add the maven repository on settings.gradle (must be the first block of the file)
-
-```groovy
-pluginManagement {
-  repositories {
-    mavenCentral()
-  }
-}    
-```
-
-Or for SNAPSHOT versions :
-
-```groovy
-pluginManagement {
-  repositories {
-    maven {
-      url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
-  }
-}
-```
-
-Then add the plugin on your Gradle build script:
+Add the plugin in your Gradle build script:
 
 Groovy
 ```groovy
 plugins {
-    id "com.ekino.oss.gradle.plugin.quality" version "0.0.1"
+    id "com.ekino.oss.gradle.plugin.quality" version "0.0.2"
 }
 ```
 
 Kotlin
 ```kotlin
 plugins {
-    id("com.ekino.oss.gradle.plugin.quality") version "0.0.1"
+    id("com.ekino.oss.gradle.plugin.quality") version "0.0.2"
 }
 ```
 
