@@ -16,7 +16,7 @@ This plugin configures:
 
 ## Requirements
 
-Gradle 5.6.4 and JDK 8 are required.
+Gradle 6.0 and JDK 8 are required.
 
 ## Checkstyle configuration
 
@@ -30,13 +30,13 @@ and after that a latest group with static import
 
 Be careful to configure your IDE code style with the same configuration to avoir errors.
 
-You can override checkstyle version using a dedicated configuration (default is 8.24)
+You can override checkstyle version using a dedicated configuration.
 
 Note: The default checkstyle.xml is compatible with 8.24 or later 
 
 ```kotlin
 checkstyle {
-    toolVersion = "8.26"
+    toolVersion = "8.29"
     configFile = file("${project.rootDir}/config/checkstyle.xml")
 }
 ```
