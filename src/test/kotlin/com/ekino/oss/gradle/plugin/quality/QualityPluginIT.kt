@@ -149,11 +149,11 @@ class QualityPluginIT {
   }
 
   @Test
-  fun `Should run checkstyle's task with default tool version`() {
+  fun `Should run checkstyle's task with Gradle default tool version`() {
     val result = runTask("project_with_test_and_integration_test", "checkStyleMain", "--info")
 
     expectThat(result.output) {
-      contains("Running Checkstyle 8.24")
+      contains("Running Checkstyle 8.27")
     }
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 ekino (https://www.ekino.com/)
+ * Copyright (c) 2020 ekino (https://www.ekino.com/)
  */
 
 package com.ekino.oss.gradle.plugin.quality
@@ -36,7 +36,6 @@ class QualityPlugin: Plugin<Project> {
 
         // Checkstyle configuration
         configure<CheckstyleExtension> {
-          toolVersion = "8.24"
           config = resources.text.fromString(getCheckstyleConfig())
         }
 
