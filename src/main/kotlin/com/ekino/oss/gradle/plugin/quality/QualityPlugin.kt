@@ -44,6 +44,11 @@ class QualityPlugin: Plugin<Project> {
           doFirst {
             println("Generating jacoco coverage report in HTML ...")
           }
+          reports {
+            xml.isEnabled = true
+            csv.isEnabled = false
+            html.isEnabled = true
+          }
           // To add ".exec" file from integrationTest task if exists
           tasks.findByName("integrationTest")?.let {
             executionData.from(file("${buildDir}/jacoco/integrationTest.exec")) // To merge Test Tasks Jacoco reports
@@ -76,8 +81,7 @@ class QualityPlugin: Plugin<Project> {
             project.findProperty("sonarCoverageExclusions")?.let { property("sonar.coverage.exclusions", it) }
             project.findProperty("sonarExclusions")?.let { property("sonar.exclusions", it) }
             tasks.findByName("integrationTest")?.let {
-              properties.remove("sonar.jacoco.reportPath")
-              property("sonar.jacoco.reportPaths", "${buildDir}/jacoco/test.exec, ${buildDir}/jacoco/integrationTest.exec")
+              property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/*.xml")
               property("sonar.junit.reportPaths", "${buildDir}/test-results/all")
               property("sonar.tests", sourceSets["test"].allJava.srcDirs.filter { it.exists() } + sourceSets["integrationTest"].allJava.srcDirs.filter { it.exists() })
             }
