@@ -78,11 +78,10 @@ This will create the JAR and run the tests
 
     ./gradlew build
 
-### Publish locally
+### Test on a local project 
 
-This will publish the JAR in your local Maven repository
-
-    ./gradlew publishToMavenLocal
+Add to your local project in the settings.gradle as described in [Gradle doc](https://docs.gradle.org/nightly/userguide/testing_gradle_plugins.html#verify-url-cmd-output)
+includeBuild '[path/to/the/gradle/plugin]'
 
 ### Publish
 
