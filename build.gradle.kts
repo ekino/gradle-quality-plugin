@@ -10,7 +10,7 @@ plugins {
   jacoco
   id("net.researchgate.release") version "2.6.0"
   id("se.bjurr.gitchangelog.git-changelog-gradle-plugin") version "1.60"
-  id("org.sonarqube") version "2.8"
+  id("org.sonarqube") version "3.0"
   id("com.gradle.plugin-publish") version "0.12.0"
 }
 
