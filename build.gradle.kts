@@ -23,7 +23,7 @@ dependencies {
 
   testImplementation(gradleTestKit())
   testImplementation("org.junit.jupiter:junit-jupiter:${property("junitVersion")}")
-  testImplementation("io.strikt:strikt-core:${property("striktVersion")}")
+  testImplementation("io.strikt:strikt-jvm:${property("striktVersion")}")
   testImplementation("io.mockk:mockk:${property("mockkVersion")}")
 }
 

@@ -16,7 +16,7 @@ This plugin configures:
 
 ## Requirements
 
-Gradle 6.0 and JDK 8 are required.
+Gradle 6.3 and JDK 8 are required.
 
 ## Checkstyle configuration
 
@@ -36,7 +36,7 @@ Note: The default checkstyle.xml is compatible with 8.24 or later
 
 ```kotlin
 checkstyle {
-    toolVersion = "8.29"
+    toolVersion = "8.41.1"
     configFile = file("${project.rootDir}/config/checkstyle.xml")
 }
 ```
@@ -59,14 +59,14 @@ Add the plugin in your Gradle build script:
 Groovy
 ```groovy
 plugins {
-    id "com.ekino.oss.gradle.plugin.quality" version "0.0.2"
+    id "com.ekino.oss.gradle.plugin.quality" version "1.0.0"
 }
 ```
 
 Kotlin
 ```kotlin
 plugins {
-    id("com.ekino.oss.gradle.plugin.quality") version "0.0.2"
+    id("com.ekino.oss.gradle.plugin.quality") version "1.0.0"
 }
 ```
 
