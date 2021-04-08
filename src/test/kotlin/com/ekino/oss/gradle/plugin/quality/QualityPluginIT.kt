@@ -10,6 +10,7 @@ import org.junit.jupiter.api.io.TempDir
 import strikt.api.expectThat
 import strikt.api.expectThrows
 import strikt.assertions.*
+import strikt.java.exists
 import java.io.File
 import java.nio.file.Path
 
@@ -153,7 +154,7 @@ class QualityPluginIT {
     val result = runTask("project_with_test_and_integration_test", "checkStyleMain", "--info")
 
     expectThat(result.output) {
-      contains("Running Checkstyle 8.27")
+      contains("Running Checkstyle 8.37")
     }
   }
 
