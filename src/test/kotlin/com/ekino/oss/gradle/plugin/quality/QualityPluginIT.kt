@@ -168,6 +168,12 @@ class QualityPluginIT {
             .contains("""Unable to find: (.*) config/missing.xml""")
   }
 
+  private fun GradleRunner.withJaCoCo(): GradleRunner {
+    val s = javaClass.classLoader.getResourceAsStream("testkit-gradle.properties")?.bufferedReader()?.readText() ?: ""
+    File(projectDir, "gradle.properties").appendText(s)
+    return this
+  }
+
   private fun runTask(project: String, vararg task: String): BuildResult {
     File("src/test/resources/$project").copyRecursively(tempDir.toFile())
 
@@ -177,6 +183,7 @@ class QualityPluginIT {
             .withTestKitDir(tempDir.toFile())
             .withPluginClasspath()
             .forwardOutput()
+            .withJaCoCo()
             .build()
   }
 
