@@ -14,7 +14,7 @@ class GradleVersionsCompatibilityTest {
     @TempDir
     lateinit var tempDir: File
 
-    @ValueSource(strings = ["6.3", "6.6.1", "6.8.3"])
+    @ValueSource(strings = ["6.3", "6.6.1", "6.8.3", "7.3.3"])
     @ParameterizedTest(name = "Gradle {0}")
     fun `Should work in gradle version`(gradleVersion: String) {
         val buildScript =
@@ -31,10 +31,17 @@ class GradleVersionsCompatibilityTest {
                 .withGradleVersion(gradleVersion)
                 .withPluginClasspath()
                 .withArguments("build", "--stacktrace")
+                .withJaCoCo()
                 .forwardOutput()
                 .build()
 
 
         expectThat(result.task(":build")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    private fun GradleRunner.withJaCoCo(): GradleRunner {
+        val s = javaClass.classLoader.getResourceAsStream("testkit-gradle.properties")?.bufferedReader()?.readText() ?: ""
+        File(projectDir, "gradle.properties").appendText(s)
+        return this
     }
 }

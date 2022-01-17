@@ -45,9 +45,9 @@ class QualityPlugin: Plugin<Project> {
             println("Generating jacoco coverage report in HTML ...")
           }
           reports {
-            xml.isEnabled = true
-            csv.isEnabled = false
-            html.isEnabled = true
+            xml.required.set(true)
+            csv.required.set(false)
+            html.required.set(true)
           }
           // To add ".exec" file from integrationTest task if exists
           tasks.findByName("integrationTest")?.let {
