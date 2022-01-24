@@ -11,7 +11,7 @@ plugins {
   id("net.researchgate.release") version "2.8.1"
   id("se.bjurr.gitchangelog.git-changelog-gradle-plugin") version "1.71.7"
   id("org.sonarqube") version "3.3"
-  id("com.gradle.plugin-publish") version "0.19.0"
+  id("com.gradle.plugin-publish") version "0.20.0"
   id( "pl.droidsonroids.jacoco.testkit") version "1.0.9"
 }
 
