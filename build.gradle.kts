@@ -8,7 +8,7 @@ plugins {
   `java-gradle-plugin`
   `kotlin-dsl`
   jacoco
-  id("net.researchgate.release") version "2.8.1"
+  id("net.researchgate.release") version "3.0.0"
   id("se.bjurr.gitchangelog.git-changelog-gradle-plugin") version "1.72.0"
   id("org.sonarqube") version "3.4.0.2513"
   id("com.gradle.plugin-publish") version "0.21.0"
