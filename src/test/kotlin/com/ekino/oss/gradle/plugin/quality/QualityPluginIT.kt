@@ -145,7 +145,7 @@ class QualityPluginIT {
     val result = runTask("project_with_test", "checkStyleMain", "--info")
 
     expectThat(result.output) {
-      contains("Running Checkstyle 8.20")
+      contains("Running Checkstyle 10.3.1")
     }
   }
 
@@ -154,7 +154,7 @@ class QualityPluginIT {
     val result = runTask("project_with_test_and_integration_test", "checkStyleMain", "--info")
 
     expectThat(result.output) {
-      contains("Running Checkstyle 8.37")
+      contains("Running Checkstyle 9.3")
     }
   }
 

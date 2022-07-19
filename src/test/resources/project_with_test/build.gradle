@@ -17,6 +17,6 @@ sonarqube {
 }
 
 checkstyle {
-    toolVersion = "8.20"
+    toolVersion = "10.3.1"
     configFile = file("${project.rootDir}/config/checkstyle_test.xml")
 }

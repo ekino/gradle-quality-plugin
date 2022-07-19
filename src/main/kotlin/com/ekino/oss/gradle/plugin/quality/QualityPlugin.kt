@@ -37,6 +37,7 @@ class QualityPlugin: Plugin<Project> {
         // Checkstyle configuration
         configure<CheckstyleExtension> {
           config = resources.text.fromString(getCheckstyleConfig())
+          toolVersion = "9.3"
         }
 
         // Jacoco configuration
