@@ -180,7 +180,6 @@ class QualityPluginIT {
     return GradleRunner.create()
             .withArguments(*task, "--stacktrace")
             .withProjectDir(tempDir.toFile())
-            .withTestKitDir(tempDir.toFile())
             .withPluginClasspath()
             .forwardOutput()
             .withJaCoCo()
