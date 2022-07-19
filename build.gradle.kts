@@ -8,7 +8,7 @@ plugins {
   jacoco
   id("net.researchgate.release") version "3.0.0"
   id("org.sonarqube") version "3.4.0.2513"
-  id("com.gradle.plugin-publish") version "0.21.0"
+  id("com.gradle.plugin-publish") version "1.0.0"
   id( "pl.droidsonroids.jacoco.testkit") version "1.0.9"
 }
 
