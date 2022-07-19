@@ -16,7 +16,7 @@ This plugin configures:
 
 ## Requirements
 
-Gradle 6.3 and JDK 8 are required.
+Gradle 6.9.2 and JDK 8 are required.
 
 ## Checkstyle configuration
 
@@ -28,7 +28,7 @@ This plugin checks that import had 3 groups in the below order:
 
 and after that a latest group with static import
 
-Be careful to configure your IDE code style with the same configuration to avoir errors.
+Be careful to configure your IDE code style with the same configuration to avoid errors.
 
 You can override checkstyle version using a dedicated configuration.
 
@@ -59,14 +59,14 @@ Add the plugin in your Gradle build script:
 Groovy
 ```groovy
 plugins {
-    id "com.ekino.oss.gradle.plugin.quality" version "1.0.0"
+    id "com.ekino.oss.gradle.plugin.quality" version "1.1.0"
 }
 ```
 
 Kotlin
 ```kotlin
 plugins {
-    id("com.ekino.oss.gradle.plugin.quality") version "1.0.0"
+    id("com.ekino.oss.gradle.plugin.quality") version "1.1.0"
 }
 ```
 
