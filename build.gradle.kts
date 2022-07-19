@@ -2,21 +2,18 @@
  * Copyright (c) 2020 ekino (https://www.ekino.com/)
  */
 
-import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
-
 plugins {
   `java-gradle-plugin`
   `kotlin-dsl`
   jacoco
   id("net.researchgate.release") version "3.0.0"
-  id("se.bjurr.gitchangelog.git-changelog-gradle-plugin") version "1.72.0"
   id("org.sonarqube") version "3.4.0.2513"
   id("com.gradle.plugin-publish") version "0.21.0"
   id( "pl.droidsonroids.jacoco.testkit") version "1.0.9"
 }
 
 repositories {
-  jcenter()
+  mavenCentral()
 }
 
 dependencies {
@@ -72,11 +69,6 @@ pluginBundle {
       version = version
     }
   }
-}
-
-val gitChangelogTask by tasks.registering(GitChangelogTask::class) {
-  file = File("CHANGELOG.md")
-  templateContent = file("changelog.mustache").readText()
 }
 
 tasks.jacocoTestReport {
