@@ -8,7 +8,7 @@ plugins {
   jacoco
   id("net.researchgate.release") version "3.0.0"
   id("org.sonarqube") version "3.4.0.2513"
-  id("com.gradle.plugin-publish") version "0.21.0"
+  id("com.gradle.plugin-publish") version "1.0.0"
   id( "pl.droidsonroids.jacoco.testkit") version "1.0.9"
 }
 
@@ -47,12 +47,12 @@ tasks.test {
   })
 }
 
-val pluginName = "gradleQuality"
 gradlePlugin {
   plugins {
-    register(pluginName) {
+    create("gradleQuality") {
       id = "com.ekino.oss.gradle.plugin.quality"
       implementationClass = "com.ekino.oss.gradle.plugin.quality.QualityPlugin"
+      displayName = "Gradle Java quality plugin"
     }
   }
 }
@@ -61,14 +61,7 @@ pluginBundle {
   website = "https://github.com/ekino/gradle-quality-plugin"
   vcsUrl = "https://github.com/ekino/gradle-quality-plugin"
   description = "Quality plugin applying some configuration for your builds (checkstyle, jacoco, sonarqube)"
-
-  (plugins) {
-    named(pluginName) {
-      displayName = "Java plugin"
-      tags = listOf("ekino", "checkstyle", "jacoco", "sonarqube")
-      version = version
-    }
-  }
+  tags = listOf("ekino", "checkstyle", "jacoco", "sonarqube")
 }
 
 tasks.jacocoTestReport {
