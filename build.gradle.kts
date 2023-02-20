@@ -7,7 +7,7 @@ plugins {
   `kotlin-dsl`
   jacoco
   id("net.researchgate.release") version "3.0.2"
-  id("org.sonarqube") version "3.5.0.2730"
+  id("org.sonarqube") version "4.0.0.2929"
   id("com.gradle.plugin-publish") version "1.1.0"
   id( "pl.droidsonroids.jacoco.testkit") version "1.0.9"
 }
