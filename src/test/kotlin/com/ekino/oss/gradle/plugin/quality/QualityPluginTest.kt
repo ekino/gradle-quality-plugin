@@ -35,8 +35,8 @@ class QualityPluginTest {
 
     every { plugin.getFilePath() } returns (null)
     expectThrows<MissingResourceException> { plugin.getCheckstyleConfig() }
-            .and { message }
-            .isA<String>()
-            .contains("The checkstyle config file cannot be found")
+      .get { message }
+      .isNotNull()
+      .contains("The checkstyle config file cannot be found")
   }
 }

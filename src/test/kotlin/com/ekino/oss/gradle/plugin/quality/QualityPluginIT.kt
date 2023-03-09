@@ -1,6 +1,5 @@
 package com.ekino.oss.gradle.plugin.quality
 
-import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -9,7 +8,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import strikt.api.expectThat
 import strikt.api.expectThrows
-import strikt.assertions.*
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
+import strikt.assertions.isTrue
 import strikt.java.exists
 import java.io.File
 import java.nio.file.Path
@@ -17,27 +20,25 @@ import java.nio.file.Path
 class QualityPluginIT {
 
   @TempDir
-  lateinit var tempDir: Path
+  private lateinit var tempDir: Path
 
   @Test
   fun `Should check project quality with only test sourceSet`() {
     val result = runTask("project_with_test", "build", "sonar")
 
-    expectThat(result.tasks).hasSize(16)
+    expectThat(result.tasks).hasSize(17)
     expectThat(result.task(":checkstyleMain")).isNotNull()
     expectThat(result.task(":checkstyleTest")).isNotNull()
-    expectThat(result.task(":jacocoTestReport")).isNotNull()
-    expectThat(result.task(":sonarqube")).isNotNull()
-    expectThat(result.task(":aggregateJunitReports")).isNull()
+    expectThat(result.task(":testCodeCoverageReport")).isNotNull()
+    expectThat(result.task(":sonar")).isNotNull()
 
     expectThat(result.task(":checkstyleMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.output.contains("[ant:checkstyle] [WARN]")).isTrue()
     expectThat(result.output.contains("DemoApplication.java:6:5: '{'")).isTrue()
     expectThat(result.task(":checkstyleTest")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.output.contains("DemoApplicationTest.java:7:5: '{'")).isTrue()
-    expectThat(result.task(":jacocoTestReport")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    expectThat(result.output.contains("Generating jacoco coverage report in HTML ...")).isTrue()
-    expectThat(result.task(":sonarqube")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    expectThat(result.task(":testCodeCoverageReport")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    expectThat(result.task(":sonar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.output.contains("COVERAGE: 25%")).isTrue()
     expectThat(result.task(":printCoverage")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
@@ -83,20 +84,20 @@ class QualityPluginIT {
   fun `Should check project quality with test and integrationTest sourceSets`() {
     val result = runTask("project_with_test_and_integration_test", "build", "sonar")
 
-    expectThat(result.tasks).hasSize(22)
+    expectThat(result.tasks).hasSize(23)
     expectThat(result.task(":checkstyleMain")).isNotNull()
     expectThat(result.task(":checkstyleTest")).isNotNull()
     expectThat(result.task(":checkstyleIntegrationTest")).isNotNull()
-    expectThat(result.task(":jacocoTestReport")).isNotNull()
-    expectThat(result.task(":sonarqube")).isNotNull()
-    expectThat(result.task(":aggregateJunitReports")).isNotNull()
+    expectThat(result.task(":testCodeCoverageReport")).isNotNull()
+    expectThat(result.task(":integrationTestCodeCoverageReport")).isNotNull()
+    expectThat(result.task(":sonar")).isNotNull()
 
     expectThat(result.task(":checkstyleMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.task(":checkstyleTest")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.task(":checkstyleIntegrationTest")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    expectThat(result.task(":jacocoTestReport")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    expectThat(result.task(":sonarqube")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    expectThat(result.task(":aggregateJunitReports")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    expectThat(result.task(":testCodeCoverageReport")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    expectThat(result.task(":integrationTestCodeCoverageReport")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    expectThat(result.task(":sonar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     expectThat(result.output.contains("COVERAGE: 0%")).isTrue()
     expectThat(result.task(":printCoverage")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
@@ -161,17 +162,9 @@ class QualityPluginIT {
   @Test
   fun `Should throw unexpected build failure exception when checkstyle config is not found`() {
     expectThrows<UnexpectedBuildFailure> { runTask("project_with_missing_checkstyle_config", "checkStyleMain", "--info") }
-            .and { this.cause }
-            .isA<TaskExecutionException>()
-            .and { message }
-            .isA<String>()
-            .contains("""Unable to find: (.*) config/missing.xml""")
-  }
-
-  private fun GradleRunner.withJaCoCo(): GradleRunner {
-    val s = javaClass.classLoader.getResourceAsStream("testkit-gradle.properties")?.bufferedReader()?.readText() ?: ""
-    File(projectDir, "gradle.properties").appendText(s)
-    return this
+      .get { message }
+      .isNotNull()
+      .contains("Unable to find:(.*)config/missing.xml".toRegex())
   }
 
   private fun runTask(project: String, vararg task: String): BuildResult {
@@ -182,7 +175,6 @@ class QualityPluginIT {
             .withProjectDir(tempDir.toFile())
             .withPluginClasspath()
             .forwardOutput()
-            .withJaCoCo()
             .build()
   }
 
