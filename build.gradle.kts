@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 ekino (https://www.ekino.com/)
+ * Copyright (c) 2023 ekino (https://www.ekino.com/)
  */
 
 plugins {
@@ -7,22 +7,21 @@ plugins {
   `kotlin-dsl`
   jacoco
   id("net.researchgate.release") version "3.0.2"
-  id("org.sonarqube") version "3.5.0.2730"
   id("com.gradle.plugin-publish") version "1.1.0"
-  id( "pl.droidsonroids.jacoco.testkit") version "1.0.9"
 }
 
 repositories {
   mavenCentral()
+  maven { setUrl("https://plugins.gradle.org/m2/") }
 }
 
 dependencies {
-  implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${property("sonarqubePluginVersion")}")
+  implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929")
 
   testImplementation(gradleTestKit())
-  testImplementation("org.junit.jupiter:junit-jupiter:${property("junitVersion")}")
-  testImplementation("io.strikt:strikt-jvm:${property("striktVersion")}")
-  testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+  testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+  testImplementation("io.strikt:strikt-jvm:0.34.1")
+  testImplementation("io.mockk:mockk:1.13.4")
 }
 
 tasks.test {
@@ -48,32 +47,21 @@ tasks.test {
 }
 
 gradlePlugin {
+  website.set("https://github.com/ekino/gradle-quality-plugin")
+  vcsUrl.set("https://github.com/ekino/gradle-quality-plugin")
   plugins {
     create("gradleQuality") {
       id = "com.ekino.oss.gradle.plugin.quality"
       implementationClass = "com.ekino.oss.gradle.plugin.quality.QualityPlugin"
       displayName = "Gradle Java quality plugin"
+      description = "Quality plugin applying some configuration for your builds (checkstyle, jacoco, sonarqube)"
+      tags.set(listOf("ekino", "checkstyle", "jacoco", "sonarqube"))
     }
   }
 }
 
-pluginBundle {
-  website = "https://github.com/ekino/gradle-quality-plugin"
-  vcsUrl = "https://github.com/ekino/gradle-quality-plugin"
-  description = "Quality plugin applying some configuration for your builds (checkstyle, jacoco, sonarqube)"
-  tags = listOf("ekino", "checkstyle", "jacoco", "sonarqube")
-}
-
 tasks.jacocoTestReport {
   reports {
-    xml.isEnabled = true
-  }
-}
-
-sonarqube {
-  properties {
-    property("sonar.projectKey", "ekino_gradle-quality-plugin")
-    property("sonar.java.coveragePlugin", "jacoco")
-    property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    xml.required.set(true)
   }
 }

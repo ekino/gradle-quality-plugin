@@ -12,10 +12,18 @@ import org.gradle.api.plugins.quality.CheckstyleExtension
 import org.gradle.api.plugins.quality.CheckstylePlugin
 import org.gradle.api.resources.MissingResourceException
 import org.gradle.api.tasks.SourceSetContainer
-import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.provideDelegate
+import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.the
+import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPlugin
+import org.gradle.testing.jacoco.plugins.JacocoReportAggregationPlugin
 import org.gradle.testing.jacoco.tasks.JacocoReport
-import org.sonarqube.gradle.SonarQubeExtension
+import org.sonarqube.gradle.SonarExtension
 import org.sonarqube.gradle.SonarQubePlugin
 
 class QualityPlugin: Plugin<Project> {
@@ -28,6 +36,7 @@ class QualityPlugin: Plugin<Project> {
       apply<CheckstylePlugin>()
       apply<JacocoPlugin>()
       apply<SonarQubePlugin>()
+      apply<JacocoReportAggregationPlugin>()
 
       val sourceSets = the<SourceSetContainer>()
 
@@ -41,7 +50,7 @@ class QualityPlugin: Plugin<Project> {
         }
 
         // Jacoco configuration
-        val jacocoTestReport by tasks.named<JacocoReport>("jacocoTestReport") {
+        val jacocoTestReports = tasks.withType<JacocoReport> {
           doFirst {
             println("Generating jacoco coverage report in HTML ...")
           }
@@ -50,52 +59,36 @@ class QualityPlugin: Plugin<Project> {
             csv.required.set(false)
             html.required.set(true)
           }
-          // To add ".exec" file from integrationTest task if exists
-          tasks.findByName("integrationTest")?.let {
-            executionData.from(file("${buildDir}/jacoco/integrationTest.exec")) // To merge Test Tasks Jacoco reports
-          }
         }
 
         val printCoverage by tasks.register<PrintCoverageTask>("printCoverage") {
           htmlJacocoReport = "$buildDir/reports/jacoco/test/html/index.html"
-          mustRunAfter(jacocoTestReport)
+          mustRunAfter(jacocoTestReports)
         }
 
         tasks.named("build") {
-          dependsOn(jacocoTestReport, printCoverage)
+          dependsOn(jacocoTestReports, printCoverage)
         }
 
         if (project.hasProperty("sonarCoverageExclusions")) {
           val excludes = (findProperty("sonarCoverageExclusions") as String).replace(".java", ".class").split(",\\s*".toRegex())
           afterEvaluate {
-            jacocoTestReport.classDirectories.setFrom(sourceSets["main"].output.classesDirs.asFileTree.matching {
-              exclude(excludes)
-            })
+            jacocoTestReports.configureEach {
+              classDirectories.setFrom(sourceSets["main"].output.classesDirs.asFileTree.matching {
+                exclude(excludes)
+              })
+            }
           }
         }
 
         // Sonar configuration
-        configure<SonarQubeExtension> {
+        configure<SonarExtension> {
           properties {
             project.findProperty("SONARQUBE_URL")?.let { property("sonar.host.url", it) }
             project.findProperty("SONARQUBE_TOKEN")?.let { property("sonar.login", it) }
             project.findProperty("sonarCoverageExclusions")?.let { property("sonar.coverage.exclusions", it) }
             project.findProperty("sonarExclusions")?.let { property("sonar.exclusions", it) }
-            tasks.findByName("integrationTest")?.let {
-              property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/*.xml")
-              property("sonar.junit.reportPaths", "${buildDir}/test-results/all")
-              property("sonar.tests", sourceSets["test"].allJava.srcDirs.filter { it.exists() } + sourceSets["integrationTest"].allJava.srcDirs.filter { it.exists() })
-            }
-          }
-        }
-
-        afterEvaluate {
-          tasks.named("sonarqube") {
-            tasks.findByName("integrationTest")?.let {
-              tasks.findByName("aggregateJunitReports")?.let {
-                dependsOn("aggregateJunitReports")
-              }
-            }
+            property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/*.xml")
           }
         }
       }

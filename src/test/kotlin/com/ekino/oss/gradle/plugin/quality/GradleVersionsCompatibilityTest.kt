@@ -12,9 +12,9 @@ import java.io.File
 class GradleVersionsCompatibilityTest {
 
     @TempDir
-    lateinit var tempDir: File
+    private lateinit var tempDir: File
 
-    @ValueSource(strings = ["6.9.2", "7.3.3", "7.4.2", "7.5"])
+    @ValueSource(strings = ["7.6.1", "8.0.2"])
     @ParameterizedTest(name = "Gradle {0}")
     fun `Should work in gradle version`(gradleVersion: String) {
         val buildScript =
@@ -31,17 +31,9 @@ class GradleVersionsCompatibilityTest {
                 .withGradleVersion(gradleVersion)
                 .withPluginClasspath()
                 .withArguments("build", "--stacktrace")
-                .withJaCoCo()
                 .forwardOutput()
                 .build()
 
-
         expectThat(result.task(":build")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    }
-
-    private fun GradleRunner.withJaCoCo(): GradleRunner {
-        val s = javaClass.classLoader.getResourceAsStream("testkit-gradle.properties")?.bufferedReader()?.readText() ?: ""
-        File(projectDir, "gradle.properties").appendText(s)
-        return this
     }
 }
