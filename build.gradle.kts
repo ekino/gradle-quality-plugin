@@ -7,7 +7,7 @@ plugins {
   `kotlin-dsl`
   jacoco
   id("net.researchgate.release") version "3.0.2"
-  id("com.gradle.plugin-publish") version "1.1.0"
+  id("com.gradle.plugin-publish") version "1.2.0"
 }
 
 repositories {
