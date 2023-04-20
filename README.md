@@ -59,14 +59,14 @@ Add the plugin in your Gradle build script:
 Groovy
 ```groovy
 plugins {
-    id "com.ekino.oss.gradle.plugin.quality" version "2.0.0"
+    id "com.ekino.oss.gradle.plugin.quality" version "2.1.0"
 }
 ```
 
 Kotlin
 ```kotlin
 plugins {
-    id("com.ekino.oss.gradle.plugin.quality") version "2.0.0"
+    id("com.ekino.oss.gradle.plugin.quality") version "2.1.0"
 }
 ```
 
