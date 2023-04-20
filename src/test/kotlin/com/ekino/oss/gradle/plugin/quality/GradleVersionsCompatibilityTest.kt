@@ -14,7 +14,7 @@ class GradleVersionsCompatibilityTest {
     @TempDir
     private lateinit var tempDir: File
 
-    @ValueSource(strings = ["7.6.1", "8.0.2"])
+    @ValueSource(strings = ["7.6.1", "8.1"])
     @ParameterizedTest(name = "Gradle {0}")
     fun `Should work in gradle version`(gradleVersion: String) {
         val buildScript =
@@ -30,7 +30,7 @@ class GradleVersionsCompatibilityTest {
                 .withProjectDir(tempDir)
                 .withGradleVersion(gradleVersion)
                 .withPluginClasspath()
-                .withArguments("build", "--stacktrace")
+                .withArguments("build")
                 .forwardOutput()
                 .build()
 
