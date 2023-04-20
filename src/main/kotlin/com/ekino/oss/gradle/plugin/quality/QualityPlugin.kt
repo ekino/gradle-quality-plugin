@@ -26,7 +26,7 @@ import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.sonarqube.gradle.SonarExtension
 import org.sonarqube.gradle.SonarQubePlugin
 
-class QualityPlugin: Plugin<Project> {
+class QualityPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     with(project) {
@@ -50,14 +50,16 @@ class QualityPlugin: Plugin<Project> {
         }
 
         // Jacoco configuration
-        val jacocoTestReports = tasks.withType<JacocoReport> {
-          doFirst {
-            println("Generating jacoco coverage report in HTML ...")
-          }
-          reports {
-            xml.required.set(true)
-            csv.required.set(false)
-            html.required.set(true)
+        val jacocoTestReports = tasks.withType<JacocoReport>().also {
+          it.configureEach {
+            doFirst {
+              println("Generating jacoco coverage report in HTML ...")
+            }
+            reports {
+              xml.required.set(true)
+              csv.required.set(false)
+              html.required.set(true)
+            }
           }
         }
 
@@ -66,12 +68,10 @@ class QualityPlugin: Plugin<Project> {
           mustRunAfter(jacocoTestReports)
         }
 
-        tasks.named("build") {
-          dependsOn(jacocoTestReports, printCoverage)
-        }
-
         if (project.hasProperty("sonarCoverageExclusions")) {
-          val excludes = (findProperty("sonarCoverageExclusions") as String).replace(".java", ".class").split(",\\s*".toRegex())
+          val excludes = (findProperty("sonarCoverageExclusions") as String)
+            .replace(".java", ".class")
+            .split(",\\s*".toRegex())
           afterEvaluate {
             jacocoTestReports.configureEach {
               classDirectories.setFrom(sourceSets["main"].output.classesDirs.asFileTree.matching {
@@ -79,6 +79,10 @@ class QualityPlugin: Plugin<Project> {
               })
             }
           }
+        }
+
+        tasks.named("build") {
+          dependsOn(jacocoTestReports, printCoverage)
         }
 
         // Sonar configuration
@@ -96,7 +100,7 @@ class QualityPlugin: Plugin<Project> {
   }
 
   internal fun getCheckstyleConfig() = getFilePath()?.use { String(it.readBytes()) }
-          ?: throw MissingResourceException("The checkstyle config file cannot be found")
+    ?: throw MissingResourceException("The checkstyle config file cannot be found")
 
   internal fun getFilePath() = QualityPlugin::class.java.classLoader?.getResourceAsStream("checkstyle.xml")
 
