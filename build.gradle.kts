@@ -19,7 +19,7 @@ dependencies {
   implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929")
 
   testImplementation(gradleTestKit())
-  testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+  testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
   testImplementation("io.strikt:strikt-jvm:0.34.1")
   testImplementation("io.mockk:mockk:1.13.5")
 }
