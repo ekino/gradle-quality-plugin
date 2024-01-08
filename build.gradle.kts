@@ -21,7 +21,7 @@ dependencies {
   testImplementation(gradleTestKit())
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
   testImplementation("io.strikt:strikt-jvm:0.34.1")
-  testImplementation("io.mockk:mockk:1.13.5")
+  testImplementation("io.mockk:mockk:1.13.9")
 }
 
 tasks.test {
